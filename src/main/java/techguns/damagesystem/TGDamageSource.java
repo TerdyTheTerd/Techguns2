@@ -22,6 +22,7 @@ public class TGDamageSource extends EntityDamageSource {
 		public DamageType damageType;
 		public DeathType deathType;
 		public float goreChance=0.5f;
+		public boolean IsPlayer = false;
 		
 		public boolean knockbackOnShieldBlock=true;
 		
@@ -45,7 +46,11 @@ public class TGDamageSource extends EntityDamageSource {
 			unresistableTypes.add("fall");
 			unresistableTypes.add("outOfWorld");
 		}
-
+		
+		public void setIsPlayer() {
+			this.IsPlayer = true;
+		}
+		
 		public void setAttackSuccessful() {
 			this.attackSuccessful=true;
 		}

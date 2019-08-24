@@ -1,8 +1,10 @@
 package techguns.events;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.logging.Level;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 
@@ -123,6 +125,7 @@ import techguns.radiation.ItemRadiationData;
 import techguns.radiation.ItemRadiationRegistry;
 import techguns.util.BlockUtils;
 import techguns.util.InventoryUtil;
+import techguns.util.TGLogger;
 import techguns.util.TextUtil;
 
 @Mod.EventBusSubscriber(modid = Techguns.MODID)
@@ -342,23 +345,19 @@ public class TGEventHandler {
 	
 	@SubscribeEvent(priority=EventPriority.HIGH, receiveCanceled=false)
 	public static void OnLivingAttack(LivingAttackEvent event){
+		//Rather than handling the entire event in our code, just calculate the corrected damage amount and set it via reflection
 		if (event.getSource() instanceof TGDamageSource) {
-			event.setCanceled(true);
+			Field finalDamage = ReflectionHelper.findField(LivingAttackEvent.class, "amount", null);
 			try {
-				DamageSystem.attackEntityFrom(event.getEntityLiving(), event.getSource(), event.getAmount());
-				
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		} else if ( (event.getSource() == DamageSource.LAVA || event.getSource()==DamageSource.ON_FIRE || event.getSource()==DamageSource.IN_FIRE) && event.getEntityLiving() instanceof EntityPlayer) {
-			float bonus = GenericArmor.getArmorBonusForPlayer((EntityPlayer) event.getEntityLiving(), TGArmorBonus.COOLING_SYSTEM,event.getEntityLiving().world.getTotalWorldTime()%5==0);
-			
-			if (bonus >=1.0f) {
-				event.setCanceled(true);
+				TGLogger.logger_server.log(Level.INFO, "OnLivingAttack");
+				finalDamage.setFloat(event, DamageSystem.getTotalCorrectedDamage(event.getEntityLiving(),
+						event.getSource(), event.getAmount()));
+			} catch (IllegalArgumentException e1) {
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				e1.printStackTrace();
+			} catch (InvocationTargetException e1) {
+				e1.printStackTrace();
 			}
 		}
 	}
