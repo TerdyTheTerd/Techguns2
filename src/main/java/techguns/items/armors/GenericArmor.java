@@ -621,7 +621,7 @@ public class GenericArmor extends ItemArmor implements ISpecialArmor , IItemTGRe
 		
 		
 		
-		ArmorProperties props = new ArmorProperties(0, 1-DamageSystem.getDamageAfterAbsorb_TGFormula(1.0f, this.getArmorValue(armor, src.damageType), this.material.toughness, src.armorPenetration), Integer.MAX_VALUE);
+		ArmorProperties props = new ArmorProperties(0, 1-DamageSystem.getDamageAfterAbsorb_TGFormula(1.0f, this.getArmorValue(armor, src.damageType), this.material.toughness, src.armorPenetration, src.isPiercingRound), Integer.MAX_VALUE);
 		
 	//	System.out.println("Armor:"+this.getArmorValue(armor, src.damageType));
 	//	System.out.println("Toughness:"+this.material.toughness);

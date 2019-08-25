@@ -47,6 +47,7 @@ import techguns.factions.TGNpcFactions;
 import techguns.items.guns.GenericGun;
 import techguns.items.guns.IProjectileFactory;
 import techguns.packets.PacketGunImpactFX;
+import techguns.util.MathUtil;
 
 public class GenericProjectile extends Entity implements IProjectile, IEntityAdditionalSpawnData {
 
@@ -58,6 +59,7 @@ public class GenericProjectile extends Entity implements IProjectile, IEntityAdd
 			});
 
 	float damage;
+	float closeRangeBonus = .5f;
 	public float speed = 1.0f; // speed in blocks per tick
 
 	protected int ticksToLive = 100;
@@ -409,28 +411,30 @@ public class GenericProjectile extends Entity implements IProjectile, IEntityAdd
 			TGDamageSource src = getProjectileDamageSource();
 
 			if (raytraceResultIn.entityHit instanceof EntityLivingBase) {
-				EntityLivingBase ent = (EntityLivingBase) raytraceResultIn.entityHit;
-
-				// Check for Headshot
-
-				/*
-				 * double heightDiff = this.posY-ent.posY;
-				 * //System.out.println("HeightDiff:"+heightDiff); if
-				 * (this.isHeadshot(ent, heightDiff)){
-				 * this.worldObj.playSoundAtEntity(ent,
-				 * "techguns:effects.bulletimpact", 1.0F, 1.0F ); dmg=dmg*2.0f;
-				 * }
-				 */
+				EntityLivingBase ent = (EntityLivingBase) raytraceResultIn.entityHit;			 
 
 				float dmg = DamageSystem.getDamageFactor(this.shooter, ent) * this.getDamage();
-
+				double heightDiff = this.posY-ent.posY;
+				System.out.println("HeightDiff:"+heightDiff);
+				//Only do headshots for players, skeletons and zombies, since their heads are at the correct offset
+				if(heightDiff >= 1.6 && (ent instanceof EntityPlayer || ent instanceof net.minecraft.entity.monster.EntityZombie || ent instanceof net.minecraft.entity.monster.EntitySkeleton)) {
+					System.out.println("That was a headshot, damage increased from " + dmg + " -> " + (dmg * 1.25f));
+					dmg += MathUtil.clamp(dmg * 1.5f, 0f, 10f);
+				}
+				float knockBack = DamageSystem.getKnockBack(src);
 				if (dmg > 0.0f) {
-					
+					/*
 					if (src.knockbackMultiplier==0.0f){
 	                	TGDamageSource knockback = TGDamageSource.getKnockbackDummyDmgSrc(this, this.shooter);
 		        		ent.attackEntityFrom(knockback, 0.01f);
         			}
-					
+					*/
+					if(src.isPiercingRound) {
+						System.out.println("That round was a piercing round");
+					} else {
+						System.out.println("Not a piercing round...");
+					}
+					ent.knockBack(ent, knockBack, .5, .5);
 					ent.attackEntityFrom(src, dmg);
 					if (src.wasSuccessful()) {
 						
@@ -645,18 +649,21 @@ public class GenericProjectile extends Entity implements IProjectile, IEntityAdd
 	 */
     protected float getDamage() {
 
+    	System.out.println("Damage drop is: " + this.damageDropStart + " " + this.damageDropEnd);
 		if (this.damageDropEnd==0f) { //not having damage drop
 			return this.damage;
 		}
 		
 		double distance = this.getDistanceTravelled();
-
-		if (distance <= this.damageDropStart) {
-			return this.damage;
+		System.out.println("Distance travelled is " + distance);
+		if (distance <= this.damageDropStart) { //Add a bonus for close range weapons. For now just add a flat amount
+			System.out.println("Added 5 bonus damage for close range shot");
+			return this.damage + 5f;
 		} else if (distance > this.damageDropEnd) {
 			return this.damageMin;
 		} else {
 			float factor = 1.0f - (float) ((distance - this.damageDropStart) / (this.damageDropEnd - this.damageDropStart));
+			System.out.println("Distance reduction factor is " + factor);
 			return (this.damageMin + (this.damage - this.damageMin) * factor);
 		}
 	}

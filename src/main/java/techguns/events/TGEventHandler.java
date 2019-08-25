@@ -358,6 +358,7 @@ public class TGEventHandler {
 				e1.printStackTrace();
 			}
 		}
+		
 	}
 	
 	@SubscribeEvent(priority=EventPriority.HIGH, receiveCanceled=false)
@@ -474,7 +475,6 @@ public class TGEventHandler {
 				if (tgs.deathType != DeathType.DEFAULT) {
 					if(Math.random()<tgs.goreChance) {
 						if (EntityDeathUtils.hasSpecialDeathAnim(entity, tgs.deathType)) {
-							//System.out.println("Send packet!");
 							TGPackets.network.sendToAllAround(new PacketEntityDeathType(entity, tgs.deathType), TGPackets.targetPointAroundEnt(entity, 100.0f));
 						}
 					}
@@ -770,12 +770,6 @@ public class TGEventHandler {
 		}
 	}
 	
-	/*@SubscribeEvent
-	public static void damageTest(LivingHurtEvent event) {
-		if (event.getEntityLiving() instanceof EntityPlayer) {
-			System.out.println("Attacking"+event.getEntityLiving()+" for "+event.getAmount() +" with "+event.getSource());
-		}
-	}*/
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent

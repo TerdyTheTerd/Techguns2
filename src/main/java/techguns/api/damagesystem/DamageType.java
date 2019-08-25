@@ -9,12 +9,12 @@ public enum DamageType {
 	PROJECTILE, //Arrows, bullets,..
 	FIRE, //fire, flamethrower
 	EXPLOSION, // Explosions like TNT, Rockets
-	ENERGY, // Energy Weapons, Lasers, Magic
+	ENERGY, // Energy Weapons, Lasers, Magic, bonus to energy based armors
 	POISON, //gas, slimy stuff
 	UNRESISTABLE, //Things that should never get reduced with armor value: starve, falldmg, suffocate...
 	ICE, //anything cold related
-	LIGHTNING, //electricity, shock, lightning magic
-	RADIATION, //
+	LIGHTNING, //electricity, shock, lightning magic, bonus to non-energy based armors
+	RADIATION, //Bypasses all armor, but low damage
 	DARK; // dark energy, black holes, dark magic
 
 	@Override

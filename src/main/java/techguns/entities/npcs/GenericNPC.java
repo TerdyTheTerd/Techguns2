@@ -330,7 +330,7 @@ public class GenericNPC extends EntityMob implements IRangedAttackMob, INPCTechg
 		
 		@Override
 		public float getTotalArmorAgainstType(TGDamageSource dmgsrc) {
-			return DamageSystem.getArmorAgainstDamageTypeDefault(this, this.armor, dmgsrc.damageType);
+			return DamageSystem.getArmorAgainstDamageTypeMobs(this, this.armor, dmgsrc.damageType);
 		}
 
 		@Override

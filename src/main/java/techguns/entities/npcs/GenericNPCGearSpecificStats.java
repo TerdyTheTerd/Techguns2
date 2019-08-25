@@ -29,7 +29,7 @@ public abstract class GenericNPCGearSpecificStats extends GenericNPC {
 				} else {
 					ItemArmor armor = (ItemArmor) stack.getItem();
 					float armorvalue = armor.getArmorMaterial().getDamageReductionAmount(armor.armorType);
-					armorvalue = DamageSystem.getArmorAgainstDamageTypeDefault(this, armorvalue, dmgsrc.damageType);
+					armorvalue = DamageSystem.getArmorAgainstDamageTypeMobs(this, armorvalue, dmgsrc.damageType);
 					totalArmor+=armorvalue;
 				}
 			}

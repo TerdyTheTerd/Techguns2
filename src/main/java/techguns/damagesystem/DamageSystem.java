@@ -47,22 +47,35 @@ public class DamageSystem {
 	
 	
 	protected static Field ENT_rand = ReflectionHelper.findField(Entity.class, "rand", "field_70146_Z");
+	
 	protected static Field ELB_idleTime = ReflectionHelper.findField(EntityLivingBase.class, "idleTime", "field_70708_bq");
+	
 	protected static Field ELB_lastDamage = ReflectionHelper.findField(EntityLivingBase.class, "lastDamage", "field_110153_bc");
+	
 	protected static Field ELB_recentlyHit = ReflectionHelper.findField(EntityLivingBase.class, "recentlyHit", "field_70718_bc");
 	protected static Field ELB_attackingPlayer = ReflectionHelper.findField(EntityLivingBase.class, "attackingPlayer", "field_70717_bb");
+	
 	protected static Field ELB_lastDamageSource = ReflectionHelper.findField(EntityLivingBase.class, "lastDamageSource", "field_189750_bF");
 	protected static Field ELB_lastDamageStamp = ReflectionHelper.findField(EntityLivingBase.class, "lastDamageStamp", "field_189751_bG");
+	
 	protected static Method ELB_canBlockDamageSource = ReflectionHelper.findMethod(EntityLivingBase.class, "canBlockDamageSource", "func_184583_d", DamageSource.class);
+	
 	protected static Method ELB_damageShield = ReflectionHelper.findMethod(EntityLivingBase.class, "damageShield", "func_184590_k", float.class);
+	
 	protected static Method ELB_blockUsingShield = ReflectionHelper.findMethod(EntityLivingBase.class, "blockUsingShield", "func_190629_c", EntityLivingBase.class);
+	
 	protected static Method ELB_damageEntity = ReflectionHelper.findMethod(EntityLivingBase.class, "damageEntity", "func_70665_d", DamageSource.class, float.class);
+	
 	protected static Method ELB_setBeenAttacked = ReflectionHelper.findMethod(EntityLivingBase.class, "markVelocityChanged", "func_70018_K");
+	
 	protected static Method ELB_checkTotemDeathProtection = ReflectionHelper.findMethod(EntityLivingBase.class, "checkTotemDeathProtection", "func_190628_d", DamageSource.class);
+	
 	protected static Method ELB_getDeathSound = ReflectionHelper.findMethod(EntityLivingBase.class, "getDeathSound", "func_184615_bR");
 	protected static Method ELB_getSoundVolume = ReflectionHelper.findMethod(EntityLivingBase.class, "getSoundVolume", "func_70599_aP");
 	protected static Method ELB_getSoundPitch = ReflectionHelper.findMethod(EntityLivingBase.class, "getSoundPitch", "func_70647_i");
+	
 	protected static Method ELB_playHurtSound = ReflectionHelper.findMethod(EntityLivingBase.class, "playHurtSound", "func_184581_c", DamageSource.class);
+	
 	protected static Method ELB_applyPotionDamageCalculations = ReflectionHelper.findMethod(EntityLivingBase.class, "applyPotionDamageCalculations", "func_70672_c", DamageSource.class, float.class);
 	protected static Method ELB_damageArmor = ReflectionHelper.findMethod(EntityLivingBase.class, "damageArmor", "func_70675_k", float.class);
 	protected static Method ELB_attackPlayerFrom = ReflectionHelper.findMethod(EntityLivingBase.class, "attackEntityFrom", "func_70097_a", DamageSource.class, float.class);
@@ -166,8 +179,10 @@ public class DamageSystem {
     	
     	TGDamageSource dmgsrc = TGDamageSource.getFromGenericDamageSource(source);
             //ent.idleTime = 0;
+    	TGLogger.logger_server.log(Level.INFO, "Damage type is " + dmgsrc.getDamageType().toString() + " " + dmgsrc.isPiercingRound);
     	if(dmgsrc.damageType == DamageType.RADIATION) {
     		dmgsrc.setDamageBypassesArmor();
+    		TGLogger.logger_server.log(Level.INFO, "Damage set to bypass armor");
     	}
             ELB_idleTime.setInt(ent, 0);
 
@@ -234,13 +249,14 @@ public class DamageSystem {
     		toughnessRatio = (toughnessAttribute / totalArmor);
     	}
     	float pen = Math.max((penetration - (toughnessRatio * penetration)), 0f);
+    	TGLogger.logger_server.log(Level.INFO, "Final pen is " + pen);
     	float bounusPiercingDamage = 0f;
     	//This could very well be busted, as on highest tier armor this will add an additional 11 damage. Then again it should balance with high tier energy based armors, to help break the energy shields faster
     	if(isPiercing) {
     		bounusPiercingDamage += (float) (Math.round(((totalArmor * .25) + (toughnessAttribute * .5)) * 2) / 2.0);
-    		System.out.println("Bonus piercing damage is " + bounusPiercingDamage);
+    		TGLogger.logger_server.log(Level.INFO, "Bonus piercing damage is " + bounusPiercingDamage);
     	}
-    	System.out.println("Penetration of " + penetration + " will ignore " + (totalArmor * pen) + " armor out of " + totalArmor + " total armor with toughness " + toughnessAttribute);
+    	TGLogger.logger_server.log(Level.INFO, "Penetration of " + penetration + " will ignore " + (totalArmor * pen) + " armor out of " + totalArmor + " total armor with toughness " + toughnessAttribute);
     	double armor = totalArmor - MathUtil.clamp(totalArmor * pen, 0.0,totalArmor);
     	return damage * (1.0-armor/25.0) + bounusPiercingDamage;
     }
@@ -259,6 +275,7 @@ public class DamageSystem {
     	}
     	//Now we have the total player armor, calculate the penetration amount
     	float totalDamage = (float) getDamageAfterAbsorb_TGFormula(damage, totalArmorRating, totalToughness, source.armorPenetration, source.isPiercingRound);
+    	//System.out.printf("Calucalating damage: Base Damage-%f, Penetration-%f, Total Armor-%f, Armor Toughness-%f, Calculated Damage-%f", damage, source.armorPenetration, totalArmorRating, totalToughness, totalDamage);
     	return (float) Math.max((Math.round(totalDamage * 2) / 2.0), 0f);
     }
 }

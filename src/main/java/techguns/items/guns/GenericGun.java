@@ -435,6 +435,7 @@ public class GenericGun extends GenericItem implements IGenericGun, IItemTGRende
 	}
 
 	public ItemStack[] getReloadItem(ItemStack stack) {
+		//This needs to be modified so we can actually use variants of ammo
 		return this.ammoType.getAmmo(this.getCurrentAmmoVariant(stack));
 	}
 	
@@ -637,6 +638,7 @@ public class GenericGun extends GenericItem implements IGenericGun, IItemTGRende
     			//mag empty, reload needed
     			
     			//look for ammo
+    			System.out.println("Current ammo variant is " + this.getCurrentAmmoVariant(stack));
     			if (InventoryUtil.consumeAmmoPlayer(player,this.ammoType.getAmmo(this.getCurrentAmmoVariant(stack)))) {
     			
     				Arrays.stream(this.ammoType.getEmptyMag()).forEach( e -> {
@@ -675,7 +677,7 @@ public class GenericGun extends GenericItem implements IGenericGun, IItemTGRende
 	    			} else {
 	    				this.reloadAmmo(stack);
 	    			}
-	    			
+	    			System.out.println("Current ammo variant is " + this.getCurrentAmmoVariant(stack));
 	    			SoundUtil.playReloadSoundOnEntity(world,player,reloadsound, 1.0F, 1.0F, false, true, TGSoundCategory.RELOAD);
 
 	    			
@@ -817,6 +819,7 @@ public class GenericGun extends GenericItem implements IGenericGun, IItemTGRende
 	
 	public int getCurrentAmmoVariant(ItemStack stack){
 		String variant = this.getCurrentAmmoVariantKey(stack);
+		System.out.println("Current ammo variant is " + variant);
 		return this.getAmmoType().getIDforVariantKey(variant);
 	}
 	

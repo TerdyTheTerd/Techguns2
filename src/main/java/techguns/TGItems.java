@@ -71,6 +71,7 @@ public class TGItems implements ITGInitializer{
 	public static ItemStack GRENADE_40MM;
 	public static ItemStack ADVANCED_ROUNDS;
 	public static ItemStack ROCKET;
+	public static ItemStack PIERCING_ROUNDS;
 	
 	public static ItemStack SMG_MAGAZINE;
 	public static ItemStack SMG_MAGAZINE_EMPTY;
@@ -218,6 +219,10 @@ public class TGItems implements ITGInitializer{
 	public static ItemStack SMG_MAGAZINE_INCENDIARY;
 	public static ItemStack ASSAULTRIFLE_MAGAZINE_INCENDIARY;
 	public static ItemStack LMG_MAGAZINE_INCENDIARY;
+	public static ItemStack AS50_MAGAZINE_PIERCING;
+	public static ItemStack RIFLE_ROUNDS_PIERCING;
+	public static ItemStack SNIPER_ROUNDS_PIERCING;
+	public static ItemStack ASSAULTRIFLE_MAGAZINE_PIERCING;
 	
 	public static ItemStack ROCKET_NUKE;
 	public static ItemStack TACTICAL_NUKE_WARHEAD;
@@ -324,6 +329,7 @@ public class TGItems implements ITGInitializer{
 		ADVANCED_ROUNDS = SHARED_ITEM.addsharedVariant("advancedrounds");
 		ROCKET = SHARED_ITEM.addsharedVariant("rocket", true, TGSlotType.AMMOSLOT);
 		RIFLE_ROUNDS_STACK = SHARED_ITEM.addsharedVariant("rifleroundsstack",TGSlotType.AMMOSLOT);
+		PIERCING_ROUNDS = SHARED_ITEM.addsharedVariant("piercingrounds", TGSlotType.AMMOSLOT);
 		
 		SMG_MAGAZINE = SHARED_ITEM.addsharedVariant("smgmagazine",TGSlotType.AMMOSLOT);
 		SMG_MAGAZINE_EMPTY = SHARED_ITEM.addsharedVariant("smgmagazineempty",TGSlotType.AMMOSLOT);
@@ -467,6 +473,11 @@ public class TGItems implements ITGInitializer{
 		MINIGUN_DRUM_INCENDIARY = SHARED_ITEM.addsharedVariant("minigundrum_incendiary", TGSlotType.AMMOSLOT);
 		ASSAULTRIFLE_MAGAZINE_INCENDIARY = SHARED_ITEM.addsharedVariant("assaultriflemagazine_incendiary",true, TGSlotType.AMMOSLOT);
 		LMG_MAGAZINE_INCENDIARY = SHARED_ITEM.addsharedVariant("lmgmagazine_incendiary",true, TGSlotType.AMMOSLOT);
+		
+		AS50_MAGAZINE_PIERCING = SHARED_ITEM.addsharedVariant("as50magazine_piercing",true, TGSlotType.AMMOSLOT);
+		RIFLE_ROUNDS_PIERCING = SHARED_ITEM.addsharedVariant("riflerounds_piercing", TGSlotType.AMMOSLOT);
+		SNIPER_ROUNDS_PIERCING = SHARED_ITEM.addsharedVariant("sniperrounds_piercing", TGSlotType.AMMOSLOT);
+		ASSAULTRIFLE_MAGAZINE_PIERCING = SHARED_ITEM.addsharedVariant("assaultriflemagazine_piercing",true, TGSlotType.AMMOSLOT);
 		
 		ROCKET_NUKE = SHARED_ITEM.addsharedVariant("rocket_nuke", true, TGSlotType.AMMOSLOT);
 		TACTICAL_NUKE_WARHEAD = SHARED_ITEM.addsharedVariant("tacticalnukewarhead");
@@ -614,6 +625,11 @@ public class TGItems implements ITGInitializer{
 		setAmmoTypeEntryForMagazine(SMG_MAGAZINE_INCENDIARY, AmmoTypes.SMG_MAGAZINE, AmmoTypes.TYPE_INCENDIARY);
 		setAmmoTypeEntryForMagazine(LMG_MAGAZINE_INCENDIARY, AmmoTypes.LMG_MAGAZINE, AmmoTypes.TYPE_INCENDIARY);
 		setAmmoTypeEntryForMagazine(MINIGUN_DRUM_INCENDIARY, AmmoTypes.MINIGUN_AMMO_DRUM, AmmoTypes.TYPE_INCENDIARY);
+		
+		//piercing
+		setAmmoTypeEntryForMagazine(AS50_MAGAZINE_PIERCING, AmmoTypes.AS50_MAGAZINE, AmmoTypes.TYPE_PIERCING);
+		setAmmoTypeEntryForMagazine(ASSAULTRIFLE_MAGAZINE, AmmoTypes.ASSAULT_RIFLE_MAGAZINE, AmmoTypes.TYPE_PIERCING);
+		
 		
 		//explosive
 		setAmmoTypeEntryForMagazine(AS50_MAGAZINE_EXPLOSIVE, AmmoTypes.AS50_MAGAZINE, AmmoTypes.TYPE_EXPLOSIVE);

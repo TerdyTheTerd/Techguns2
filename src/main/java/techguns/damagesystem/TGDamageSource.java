@@ -13,6 +13,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import techguns.api.damagesystem.DamageType;
 import techguns.deatheffects.EntityDeathUtils.DeathType;
+import techguns.entities.projectiles.GenericProjectilePiercing;
 
 public class TGDamageSource extends EntityDamageSource {
 
@@ -32,6 +33,7 @@ public class TGDamageSource extends EntityDamageSource {
 		public float armorPenetration=0.0f;
 		public boolean ignoreHurtresistTime=false;
 		public float knockbackMultiplier=1.0f;
+		public boolean isPiercingRound =  false;
 		
 		/**
 		 * set to true when this damagesource was converted from another damage source, with new TGDamageSource(DamageSource src) 
@@ -50,7 +52,7 @@ public class TGDamageSource extends EntityDamageSource {
 		public void setIsPlayer() {
 			this.IsPlayer = true;
 		}
-		
+
 		public void setAttackSuccessful() {
 			this.attackSuccessful=true;
 		}
@@ -170,6 +172,7 @@ public class TGDamageSource extends EntityDamageSource {
 			newSrc.armorPenetration = other.armorPenetration;
 			newSrc.goreChance = other.goreChance;
 			newSrc.ignoreHurtresistTime = other.ignoreHurtresistTime;
+			newSrc.isPiercingRound = other.isPiercingRound;
 			return newSrc;
 		}
 		
@@ -178,6 +181,9 @@ public class TGDamageSource extends EntityDamageSource {
 			this.attacker = attacker;
 			this.damageType = damageType;
 			this.deathType = deathType;
+			if(damagingEntity instanceof GenericProjectilePiercing) {
+				this.isPiercingRound = true;
+			}
 			setBehaviourForVanilla();
 		}
 
