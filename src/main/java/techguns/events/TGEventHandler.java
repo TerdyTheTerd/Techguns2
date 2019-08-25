@@ -343,15 +343,13 @@ public class TGEventHandler {
 		
 	}
 	
-	@SubscribeEvent(priority=EventPriority.HIGH, receiveCanceled=false)
+	@SubscribeEvent(priority=EventPriority.HIGHEST, receiveCanceled=false)
 	public static void OnLivingAttack(LivingAttackEvent event){
 		//Rather than handling the entire event in our code, just calculate the corrected damage amount and set it via reflection
 		if (event.getSource() instanceof TGDamageSource) {
 			Field finalDamage = ReflectionHelper.findField(LivingAttackEvent.class, "amount", null);
 			try {
-				TGLogger.logger_server.log(Level.INFO, "OnLivingAttack");
-				finalDamage.setFloat(event, DamageSystem.getTotalCorrectedDamage(event.getEntityLiving(),
-						event.getSource(), event.getAmount()));
+				finalDamage.setFloat(event, DamageSystem.getModifiedDamage(event.getEntityLiving(), event.getSource(), event.getAmount()));
 			} catch (IllegalArgumentException e1) {
 				e1.printStackTrace();
 			} catch (IllegalAccessException e1) {
